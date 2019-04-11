@@ -6,6 +6,7 @@ export default class SnakeGame extends React.Component {
 		this.state = {
 			board: [],
 			snake: [],
+			direction: 'left',
 			food: [],
 		};
 	}
@@ -20,16 +21,16 @@ export default class SnakeGame extends React.Component {
 		board[8][12] = 1;
 		board[8][13] = 1;
 		board[8][14] = 1;
-		this.moveSnake('down');
+		this.moveSnake();
 		document.addEventListener('keydown', this.navigation);
 		this.setState({ board, snake });
 	}
 
-	moveSnake(direction) {
+	moveSnake() {
 		this.moveSnakeInterval = setInterval(() => {
 			let { snake, board } = this.state;
 			let head = [];
-			switch (direction) {
+			switch (this.state.direction) {
 				case 'left':
 					head.push(snake[0][0]);
 					head.push(snake[0][1] - 1);
@@ -96,7 +97,7 @@ export default class SnakeGame extends React.Component {
 					break;
 				default:
 			}
-		}, 250);
+		}, 1000);
 	}
 
 	endGame = () => {
@@ -129,13 +130,45 @@ export default class SnakeGame extends React.Component {
 		}
 	};
 
-	changeDirectionToLeft = () => {};
+	changeDirectionToLeft = () => {
+		const { direction } = this.state;
+		if (direction === 'up' || direction === 'down') {
+			const newDirection = 'left';
+			this.setState({
+				direction: newDirection,
+			});
+		}
+	};
 
-	changeDirectionToUp = () => {};
+	changeDirectionToUp = () => {
+		const { direction } = this.state;
+		if (direction === 'left' || direction === 'right') {
+			const newDirection = 'up';
+			this.setState({
+				direction: newDirection,
+			});
+		}
+	};
 
-	changeDirectionToRight = () => {};
+	changeDirectionToRight = () => {
+		const { direction } = this.state;
+		if (direction === 'up' || direction === 'down') {
+			const newDirection = 'right';
+			this.setState({
+				direction: newDirection,
+			});
+		}
+	};
 
-	changeDirectionToDown = () => {};
+	changeDirectionToDown = () => {
+		const { direction } = this.state;
+		if (direction === 'left' || direction === 'right') {
+			const newDirection = 'down';
+			this.setState({
+				direction: newDirection,
+			});
+		}
+	};
 
 	componentWillUnmount() {
 		document.removeEventListener('keydown', this.navigation);
