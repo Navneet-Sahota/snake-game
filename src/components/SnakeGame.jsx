@@ -4,6 +4,7 @@ export default class SnakeGame extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			status: 0,
 			board: [],
 			snake: [],
 			direction: 'left',
@@ -14,6 +15,10 @@ export default class SnakeGame extends React.Component {
 	}
 
 	componentDidMount() {
+		this.startGame();
+	}
+
+	startGame = () => {
 		let board = new Array(20);
 		for (let i = 0; i < board.length; i += 1) {
 			let cell = new Array(28).fill(0);
@@ -34,7 +39,7 @@ export default class SnakeGame extends React.Component {
 		}
 		document.addEventListener('keydown', this.navigation);
 		this.setState({ board, snake, food, highScore });
-	}
+	};
 
 	getRandomInt = max => {
 		return Math.floor(Math.random() * Math.floor(max));
@@ -166,6 +171,7 @@ export default class SnakeGame extends React.Component {
 		if (score > highScore || highScore === null) {
 			localStorage.setItem('highScore', score);
 		}
+		this.setState({ status: 1 });
 	};
 
 	navigation = event => {
@@ -233,12 +239,27 @@ export default class SnakeGame extends React.Component {
 		}
 	};
 
+	restart = () => {
+		this.setState(
+			{
+				status: 0,
+				board: [],
+				snake: [],
+				direction: 'left',
+				food: [],
+				score: 0,
+				highScore: 0,
+			},
+			() => this.startGame(),
+		);
+	};
+
 	componentWillUnmount() {
 		document.removeEventListener('keydown', this.navigation);
 	}
 
 	render() {
-		const { board, score, highScore } = this.state;
+		const { board, score, highScore, status } = this.state;
 		return (
 			<React.Fragment>
 				<h1
@@ -263,31 +284,57 @@ export default class SnakeGame extends React.Component {
 				>
 					Score: {score}
 				</div>
-				<div
-					style={{
-						margin: '0 auto',
-						width: '700px',
-						height: '500px',
-						display: 'flex',
-						flexWrap: 'wrap',
-						backgroundColor: 'white',
-					}}
-				>
-					{board.map((row, rowIndex) =>
-						row.map((cell, colIndex) => (
-							<div
-								key={`${rowIndex}${colIndex}${cell}`}
-								style={{
-									boxSizing: 'border=box',
-									backgroundColor:
-										cell === 0 ? 'yellow' : cell === 1 ? 'blue' : 'red',
-									width: '25px',
-									height: '25px',
-								}}
-							/>
-						)),
-					)}
-				</div>
+				{status ? (
+					<div
+						style={{
+							padding: '4vH 0 4vH 0',
+							width: '100vW',
+							textAlign: 'center',
+						}}
+					>
+						<button
+							style={{
+								backgroundColor: 'blue',
+								color: 'white',
+								borderRadius: '3px',
+								border: '2px solid blue',
+								padding: '.75rem 1rem',
+								fontSize: '2rem',
+								cursor: 'pointer',
+								boxShadow: '0 0 10px black',
+							}}
+							onClick={this.restart}
+						>
+							Try Again
+						</button>
+					</div>
+				) : (
+					<div
+						style={{
+							margin: '0 auto',
+							width: '700px',
+							height: '500px',
+							display: 'flex',
+							flexWrap: 'wrap',
+							backgroundColor: 'white',
+						}}
+					>
+						{board.map((row, rowIndex) =>
+							row.map((cell, colIndex) => (
+								<div
+									key={`${rowIndex}${colIndex}${cell}`}
+									style={{
+										boxSizing: 'border=box',
+										backgroundColor:
+											cell === 0 ? 'yellow' : cell === 1 ? 'blue' : 'red',
+										width: '25px',
+										height: '25px',
+									}}
+								/>
+							)),
+						)}
+					</div>
+				)}
 				<div
 					style={{
 						textAlign: 'center',
