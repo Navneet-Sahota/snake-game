@@ -341,7 +341,11 @@ export default class SnakeGame extends React.Component {
 									key={`${rowIndex}${colIndex}${cell}`}
 									style={{
 										backgroundColor:
-											cell === 0 ? 'yellow' : cell === 1 ? 'blue' : 'red',
+											cell === 0
+												? '#c4f2a9'
+												: cell === 1
+												? '#365cb5'
+												: '#b7173d',
 										width: '25px',
 										height: '25px',
 									}}
