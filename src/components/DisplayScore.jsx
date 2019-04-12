@@ -10,7 +10,7 @@ const DisplayScore = props => (
 			fontSize: '3rem',
 		}}
 	>
-		{props.highScore
+		{props.highScore || props.highScore === 0
 			? `High Score: ${props.highScore}`
 			: `Score: ${props.score}`}
 	</div>
