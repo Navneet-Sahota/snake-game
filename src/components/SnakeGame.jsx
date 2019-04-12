@@ -59,12 +59,16 @@ export default class SnakeGame extends React.Component {
 						} else {
 							snake.unshift(head);
 							let tail = snake.pop();
-							board[head[0]][head[1]] = 1;
-							board[tail[0]][tail[1]] = 0;
-							this.setState({
-								board,
-								snake,
-							});
+							if (board[head[0]][head[1]] === 1) {
+								this.endGame();
+							} else {
+								board[head[0]][head[1]] = 1;
+								board[tail[0]][tail[1]] = 0;
+								this.setState({
+									board,
+									snake,
+								});
+							}
 						}
 					} else {
 						this.endGame();
@@ -79,12 +83,16 @@ export default class SnakeGame extends React.Component {
 						} else {
 							snake.unshift(head);
 							let tail = snake.pop();
-							board[head[0]][head[1]] = 1;
-							board[tail[0]][tail[1]] = 0;
-							this.setState({
-								board,
-								snake,
-							});
+							if (board[head[0]][head[1]] === 1) {
+								this.endGame();
+							} else {
+								board[head[0]][head[1]] = 1;
+								board[tail[0]][tail[1]] = 0;
+								this.setState({
+									board,
+									snake,
+								});
+							}
 						}
 					} else {
 						this.endGame();
@@ -99,12 +107,16 @@ export default class SnakeGame extends React.Component {
 						} else {
 							snake.unshift(head);
 							let tail = snake.pop();
-							board[head[0]][head[1]] = 1;
-							board[tail[0]][tail[1]] = 0;
-							this.setState({
-								board,
-								snake,
-							});
+							if (board[head[0]][head[1]] === 1) {
+								this.endGame();
+							} else {
+								board[head[0]][head[1]] = 1;
+								board[tail[0]][tail[1]] = 0;
+								this.setState({
+									board,
+									snake,
+								});
+							}
 						}
 					} else {
 						this.endGame();
@@ -119,12 +131,16 @@ export default class SnakeGame extends React.Component {
 						} else {
 							snake.unshift(head);
 							let tail = snake.pop();
-							board[head[0]][head[1]] = 1;
-							board[tail[0]][tail[1]] = 0;
-							this.setState({
-								board,
-								snake,
-							});
+							if (board[head[0]][head[1]] === 1) {
+								this.endGame();
+							} else {
+								board[head[0]][head[1]] = 1;
+								board[tail[0]][tail[1]] = 0;
+								this.setState({
+									board,
+									snake,
+								});
+							}
 						}
 					} else {
 						this.endGame();
@@ -324,7 +340,6 @@ export default class SnakeGame extends React.Component {
 								<div
 									key={`${rowIndex}${colIndex}${cell}`}
 									style={{
-										boxSizing: 'border=box',
 										backgroundColor:
 											cell === 0 ? 'yellow' : cell === 1 ? 'blue' : 'red',
 										width: '25px',
