@@ -8,6 +8,8 @@ export default class SnakeGame extends React.Component {
 			snake: [],
 			direction: 'left',
 			food: [],
+			score: 0,
+			highScore: 0,
 		};
 	}
 
@@ -17,32 +19,48 @@ export default class SnakeGame extends React.Component {
 			let cell = new Array(28).fill(0);
 			board[i] = cell;
 		}
-		const snake = [[8, 12], [8, 13], [8, 14]];
+		const snake = [[8, 12]];
 		board[8][12] = 1;
-		board[8][13] = 1;
-		board[8][14] = 1;
+		let food = [];
+		do {
+			food[0] = this.getRandomInt(19);
+			food[1] = this.getRandomInt(27);
+		} while (food[0] === 8 && food[1] === 12);
+		board[food[0]][food[1]] = 2;
 		this.moveSnake();
+		let highScore = localStorage.getItem('highScore');
+		if (highScore === null) {
+			highScore = 0;
+		}
 		document.addEventListener('keydown', this.navigation);
-		this.setState({ board, snake });
+		this.setState({ board, snake, food, highScore });
 	}
+
+	getRandomInt = max => {
+		return Math.floor(Math.random() * Math.floor(max));
+	};
 
 	moveSnake() {
 		this.moveSnakeInterval = setInterval(() => {
-			let { snake, board } = this.state;
+			let { snake, board, food } = this.state;
 			let head = [];
 			switch (this.state.direction) {
 				case 'left':
 					head.push(snake[0][0]);
 					head.push(snake[0][1] - 1);
 					if (head[1] >= 0) {
-						snake.unshift(head);
-						let tail = snake.pop();
-						board[head[0]][head[1]] = 1;
-						board[tail[0]][tail[1]] = 0;
-						this.setState({
-							board,
-							snake,
-						});
+						if (food[0] === head[0] && food[1] === head[1]) {
+							this.generateNewFood();
+						} else {
+							snake.unshift(head);
+							let tail = snake.pop();
+							board[head[0]][head[1]] = 1;
+							board[tail[0]][tail[1]] = 0;
+							this.setState({
+								board,
+								snake,
+							});
+						}
 					} else {
 						this.endGame();
 					}
@@ -51,14 +69,18 @@ export default class SnakeGame extends React.Component {
 					head.push(snake[0][0] - 1);
 					head.push(snake[0][1]);
 					if (head[0] >= 0) {
-						snake.unshift(head);
-						let tail = snake.pop();
-						board[head[0]][head[1]] = 1;
-						board[tail[0]][tail[1]] = 0;
-						this.setState({
-							board,
-							snake,
-						});
+						if (food[0] === head[0] && food[1] === head[1]) {
+							this.generateNewFood();
+						} else {
+							snake.unshift(head);
+							let tail = snake.pop();
+							board[head[0]][head[1]] = 1;
+							board[tail[0]][tail[1]] = 0;
+							this.setState({
+								board,
+								snake,
+							});
+						}
 					} else {
 						this.endGame();
 					}
@@ -67,14 +89,18 @@ export default class SnakeGame extends React.Component {
 					head.push(snake[0][0]);
 					head.push(snake[0][1] + 1);
 					if (head[1] <= 27) {
-						snake.unshift(head);
-						let tail = snake.pop();
-						board[head[0]][head[1]] = 1;
-						board[tail[0]][tail[1]] = 0;
-						this.setState({
-							board,
-							snake,
-						});
+						if (food[0] === head[0] && food[1] === head[1]) {
+							this.generateNewFood();
+						} else {
+							snake.unshift(head);
+							let tail = snake.pop();
+							board[head[0]][head[1]] = 1;
+							board[tail[0]][tail[1]] = 0;
+							this.setState({
+								board,
+								snake,
+							});
+						}
 					} else {
 						this.endGame();
 					}
@@ -83,26 +109,63 @@ export default class SnakeGame extends React.Component {
 					head.push(snake[0][0] + 1);
 					head.push(snake[0][1]);
 					if (head[0] <= 19) {
-						snake.unshift(head);
-						let tail = snake.pop();
-						board[head[0]][head[1]] = 1;
-						board[tail[0]][tail[1]] = 0;
-						this.setState({
-							board,
-							snake,
-						});
+						if (food[0] === head[0] && food[1] === head[1]) {
+							this.generateNewFood();
+						} else {
+							snake.unshift(head);
+							let tail = snake.pop();
+							board[head[0]][head[1]] = 1;
+							board[tail[0]][tail[1]] = 0;
+							this.setState({
+								board,
+								snake,
+							});
+						}
 					} else {
 						this.endGame();
 					}
 					break;
 				default:
 			}
-		}, 1000);
+		}, 125);
 	}
+
+	generateNewFood = () => {
+		let { food, board, snake } = this.state;
+		snake.unshift([food[0], food[1]]);
+		board[food[0]][food[1]] = 1;
+		do {
+			food[0] = this.getRandomInt(19);
+			food[1] = this.getRandomInt(27);
+		} while (board[food[0]][food[1]] === 1 || board[food[0]][food[1]] === 2);
+		board[food[0]][food[1]] = 2;
+		this.setState(
+			{
+				board,
+				food,
+			},
+			() => {
+				this.incrementScore();
+			},
+		);
+	};
+
+	incrementScore = () => {
+		let { snake, score } = this.state;
+		score = (snake.length - 1) * 10;
+		this.setState({
+			score,
+		});
+	};
 
 	endGame = () => {
 		clearInterval(this.moveSnakeInterval);
 		alert('Game Over!');
+		const { score } = this.state;
+		const highScore = localStorage.getItem('highScore');
+		if (score > highScore || highScore === null) {
+			localStorage.setItem('highScore', score);
+		}
 	};
 
 	navigation = event => {
@@ -175,18 +238,31 @@ export default class SnakeGame extends React.Component {
 	}
 
 	render() {
-		const { board, snake } = this.state;
+		const { board, score, highScore } = this.state;
 		return (
 			<React.Fragment>
 				<h1
 					style={{
-						color: 'white',
 						textAlign: 'center',
-						padding: '5vH',
+						margin: '0',
+						padding: '2vH 0 0 0',
+						color: '#0ff',
+						fontSize: '5rem',
 					}}
 				>
 					Snake Game
 				</h1>
+				<div
+					style={{
+						padding: '4vH 0 2vH 0',
+						color: '#0ff',
+						width: '100vW',
+						textAlign: 'center',
+						fontSize: '3rem',
+					}}
+				>
+					Score: {score}
+				</div>
 				<div
 					style={{
 						margin: '0 auto',
@@ -212,7 +288,17 @@ export default class SnakeGame extends React.Component {
 						)),
 					)}
 				</div>
-				;
+				<div
+					style={{
+						textAlign: 'center',
+						padding: '2vH 0 0 1vH',
+						color: '#0ff',
+						width: '100vW',
+						fontSize: '3rem',
+					}}
+				>
+					High Score: {highScore >= score ? highScore : score}
+				</div>
 			</React.Fragment>
 		);
 	}
