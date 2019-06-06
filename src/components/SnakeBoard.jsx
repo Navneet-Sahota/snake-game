@@ -17,7 +17,7 @@ const SnakeBoard = props => (
 					key={`${rowIndex}${colIndex}${cell}`}
 					style={{
 						backgroundColor:
-							cell === 0 ? '#c4f2a9' : cell === 1 ? '#365cb5' : '#b7173d',
+							cell === 0 ? '#aacc66' : cell === 1 ? '#0000ff' : '#d80404',
 						width: '25px',
 						height: '25px',
 					}}

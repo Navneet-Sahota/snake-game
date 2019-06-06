@@ -10,7 +10,7 @@ const Button = props => (
 			padding: '.75rem 1rem',
 			fontSize: '2rem',
 			cursor: 'pointer',
-			boxShadow: '0 0 10px black',
+			boxShadow: '0 0 10px 3px white',
 		}}
 		onClick={props.onClick}
 	>
