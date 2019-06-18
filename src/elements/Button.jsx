@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Button = props => (
+const Button = ({ onClick, name }) => (
 	<button
+		type='button'
 		style={{
 			backgroundColor: 'blue',
 			color: 'white',
@@ -12,10 +14,15 @@ const Button = props => (
 			cursor: 'pointer',
 			boxShadow: '0 0 10px 3px white',
 		}}
-		onClick={props.onClick}
+		onClick={onClick}
 	>
-		{props.name}
+		{name}
 	</button>
 );
+
+Button.propTypes = {
+	onClick: PropTypes.func.isRequired,
+	name: PropTypes.string.isRequired,
+};
 
 export default Button;

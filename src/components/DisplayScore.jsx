@@ -1,19 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const DisplayScore = props => (
+const DisplayScore = ({ highScore, score }) => (
 	<div
 		style={{
-			padding: props.highScore ? '2vH 0 0 1vH' : '4vH 0 2vH 0',
+			padding: highScore ? '2vH 0 0 1vH' : '4vH 0 2vH 0',
 			color: '#0ff',
 			width: '100vW',
 			textAlign: 'center',
 			fontSize: '3rem',
 		}}
 	>
-		{props.highScore || props.highScore === 0
-			? `High Score: ${props.highScore}`
-			: `Score: ${props.score}`}
+		{highScore || highScore === 0
+			? `High Score: ${highScore}`
+			: `Score: ${score}`}
 	</div>
 );
+
+DisplayScore.propTypes = {
+	highScore: PropTypes.number,
+	score: PropTypes.number,
+};
 
 export default DisplayScore;

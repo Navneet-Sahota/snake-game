@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const SnakeBoard = props => (
+const SnakeBoard = ({ board }) => (
 	<div
 		style={{
 			margin: '0 auto',
@@ -11,10 +12,10 @@ const SnakeBoard = props => (
 			backgroundColor: 'white',
 		}}
 	>
-		{props.board.map((row, rowIndex) =>
+		{board.map((row, rowIndex) =>
 			row.map((cell, colIndex) => (
 				<div
-					key={`${rowIndex}${colIndex}${cell}`}
+					key={`${rowIndex}-${colIndex}-${cell}`}
 					style={{
 						backgroundColor:
 							cell === 0 ? '#aacc66' : cell === 1 ? '#0000ff' : '#d80404',
@@ -26,5 +27,9 @@ const SnakeBoard = props => (
 		)}
 	</div>
 );
+
+SnakeBoard.propTypes = {
+	board: PropTypes.array.isRequired,
+};
 
 export default SnakeBoard;

@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import React from 'react';
 import Header from './Header';
 import DisplayScore from './DisplayScore';
@@ -22,14 +23,18 @@ export default class SnakeGame extends React.Component {
 		this.startGame();
 	}
 
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this.navigation);
+	}
+
 	startGame = () => {
-		let board = new Array(20),
-			highScore = localStorage.getItem('highScore'),
-			food = [];
+		const board = new Array(20);
+		let highScore = localStorage.getItem('highScore');
+		const food = [];
 		// Head of the Snake
 		const snake = [[8, 12]];
 		for (let i = 0; i < board.length; i += 1) {
-			let cell = new Array(28).fill(0);
+			const cell = new Array(28).fill(0);
 			board[i] = cell;
 		}
 		// if board cell is 1, then Snake's body is at that cell
@@ -45,18 +50,21 @@ export default class SnakeGame extends React.Component {
 			highScore = 0;
 		}
 		document.addEventListener('keydown', this.navigation);
-		this.setState({ board, snake, food, highScore });
+		this.setState({
+			board,
+			snake,
+			food,
+			highScore,
+		});
 	};
 
-	getRandomInt = max => {
-		return Math.floor(Math.random() * Math.floor(max));
-	};
+	getRandomInt = max => Math.floor(Math.random() * Math.floor(max));
 
-	moveSnake() {
+	moveSnake = () => {
 		this.moveSnakeInterval = setInterval(() => {
-			let { snake, board, food } = this.state;
-			let head = [];
-			switch (this.state.direction) {
+			const { snake, board, food, direction } = this.state;
+			const head = [];
+			switch (direction) {
 				case 'left':
 					head.push(snake[0][0]);
 					head.push(snake[0][1] - 1);
@@ -65,7 +73,7 @@ export default class SnakeGame extends React.Component {
 							this.generateNewFood();
 						} else {
 							snake.unshift(head);
-							let tail = snake.pop();
+							const tail = snake.pop();
 							if (board[head[0]][head[1]] === 1) {
 								// snake overlaps
 								this.endGame();
@@ -90,7 +98,7 @@ export default class SnakeGame extends React.Component {
 							this.generateNewFood();
 						} else {
 							snake.unshift(head);
-							let tail = snake.pop();
+							const tail = snake.pop();
 							if (board[head[0]][head[1]] === 1) {
 								// snake overlaps
 								this.endGame();
@@ -115,7 +123,7 @@ export default class SnakeGame extends React.Component {
 							this.generateNewFood();
 						} else {
 							snake.unshift(head);
-							let tail = snake.pop();
+							const tail = snake.pop();
 							if (board[head[0]][head[1]] === 1) {
 								// snake overlaps
 								this.endGame();
@@ -140,7 +148,7 @@ export default class SnakeGame extends React.Component {
 							this.generateNewFood();
 						} else {
 							snake.unshift(head);
-							let tail = snake.pop();
+							const tail = snake.pop();
 							if (board[head[0]][head[1]] === 1) {
 								// snake overlaps
 								this.endGame();
@@ -160,10 +168,10 @@ export default class SnakeGame extends React.Component {
 				default:
 			}
 		}, 125);
-	}
+	};
 
 	generateNewFood = () => {
-		let { food, board, snake } = this.state;
+		const { food, board, snake } = this.state;
 		snake.unshift([food[0], food[1]]);
 		board[food[0]][food[1]] = 1;
 		do {
@@ -183,7 +191,8 @@ export default class SnakeGame extends React.Component {
 	};
 
 	incrementScore = () => {
-		let { snake, score } = this.state;
+		const { snake } = this.state;
+		let { score } = this.state;
 		score = (snake.length - 1) * 10;
 		this.setState({
 			score,
@@ -197,6 +206,7 @@ export default class SnakeGame extends React.Component {
 		if (score > highScore || highScore === null) {
 			localStorage.setItem('highScore', score);
 		}
+		// eslint-disable-next-line no-alert
 		alert('Game Over!');
 		this.setState({ status: 1 });
 	};
@@ -275,10 +285,6 @@ export default class SnakeGame extends React.Component {
 			() => this.startGame(),
 		);
 	};
-
-	componentWillUnmount() {
-		document.removeEventListener('keydown', this.navigation);
-	}
 
 	render() {
 		const { board, score, highScore, status } = this.state;
