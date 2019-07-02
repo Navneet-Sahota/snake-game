@@ -1,6 +1,6 @@
 <p align="center">
   <h1>
-    <a href="https://wizardly-ardinghelli-0b46bf.netlify.com/">
+    <a href="https://navneet-snake-game.netlify.com/">
       Snake Game
     </a>
   </h1>
